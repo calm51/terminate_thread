@@ -4,9 +4,17 @@ import sys
 from threading import Thread
 
 
-def terminate(thread: Thread):
-    if thread.is_alive():
+def terminate(thread: Thread) -> None:
+    if isinstance(thread, Thread) and thread.is_alive():
         _lib.main(ctypes.c_longlong(thread._ident))
+
+
+def kill(thread: Thread) -> bool:
+    if isinstance(thread, Thread) and thread.is_alive():
+        return ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_longlong(thread._ident),
+                                                          ctypes.py_object(SystemExit)) == 1
+    else:
+        return False
 
 
 def _find_lib():
