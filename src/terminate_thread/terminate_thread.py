@@ -12,7 +12,7 @@ def terminate(thread: Thread) -> None:
 def kill(thread: Thread) -> bool:
     if isinstance(thread, Thread) and thread.is_alive():
         # InterruptedError SystemExit
-        return ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_longlong(thread._ident),
+        return ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(thread._ident),
                                                           ctypes.py_object(InterruptedError)) == 1
     return False
 
