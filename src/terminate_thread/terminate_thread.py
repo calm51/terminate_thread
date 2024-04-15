@@ -10,17 +10,24 @@ def terminate(thread: Thread) -> None:
         if _lib is None:
             _lib = ctypes.CDLL(_find_lib())
         _lib.main(ctypes.c_longlong(thread._ident))
-        thread._tstate_lock.release()
-        thread._stop()
-        thread.join()
+        try:
+            thread._tstate_lock.release()
+            thread._stop()
+            thread.join(timeout=1)
+        except Exception:
+            pass
 
 
 def kill(thread: Thread) -> bool:
     if isinstance(thread, Thread) and thread.is_alive():
         # InterruptedError SystemExit
         _ = ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(thread._ident),
-                                                          ctypes.py_object(SystemExit)) == 1
-        if _: thread.join()
+                                                       ctypes.py_object(SystemExit)) == 1
+        if _:
+            try:
+                thread.join(timeout=1)
+            except Exception:
+                pass
         return _
     return False
 
