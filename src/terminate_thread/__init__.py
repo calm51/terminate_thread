@@ -1,3 +1,3 @@
-from .terminate_thread import terminate
+from .terminate_thread import terminate, kill
 
-__all__ = ["terminate", ]
+__all__ = ["terminate", "kill", ]
