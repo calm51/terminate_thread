@@ -1,7 +1,7 @@
 ```python3
 import threading
 import time
-from terminate_thread import terminate
+from terminate_thread import terminate, kill
 
 
 def thread_func1():
@@ -16,7 +16,11 @@ if __name__ == "__main__":
     t = threading.Thread(target=thread_func1, )
     t.start()
     time.sleep(2)
+
     terminate(t)
+    # or
+    kill(t)
+
     exit(0)
 
 
