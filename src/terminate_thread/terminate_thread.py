@@ -5,7 +5,10 @@ from threading import Thread
 
 
 def terminate(thread: Thread) -> None:
+    global _lib
     if isinstance(thread, Thread) and thread.is_alive():
+        if _lib is None:
+            _lib = ctypes.CDLL(_find_lib())
         _lib.main(ctypes.c_longlong(thread._ident))
         thread._tstate_lock.release()
         thread._stop()
@@ -37,4 +40,4 @@ def _find_lib():
 
 
 _lib_name = 'libterminate.dll' if os.name == "nt" else 'libterminate.so'
-_lib = ctypes.CDLL(_find_lib())
+_lib = None
