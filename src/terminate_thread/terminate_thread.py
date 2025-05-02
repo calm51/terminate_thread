@@ -37,6 +37,7 @@ def _find_lib():
              os.path.join(os.path.dirname(__file__), "terminate_thread", ),
              os.path.dirname(os.path.abspath(sys.argv[0])),
              os.getcwd(),
+             *sys.path,
              ]
     for i in paths:
         p = os.path.join(i, _lib_name)
